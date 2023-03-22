@@ -45,9 +45,9 @@ data = dict(
     persistent_workers=False if debug else True,
     samples_per_gpu=1,
     workers_per_gpu=1 if debug else 4,
-    train=dict(pipline=train_pipeline),
-    val=dict(pipline=test_pipeline),
-    test=dict(pipline=test_pipeline))
+    train=dict(pipeline=train_pipeline),
+    val=dict(pipeline=test_pipeline),
+    test=dict(pipeline=test_pipeline))
 
 custom_hooks = [dict(type='MyHook'), dict(type='NumClassCheckHook')]
 
