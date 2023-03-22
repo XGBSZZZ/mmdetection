@@ -1,0 +1,12 @@
+# 图片 还可以异步
+python image_demo.py demo.jpg ../configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py ../checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
+
+# 打开相机
+python webcam_demo.py ../configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py ../checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
+
+# 操作视频
+python video_demo.py demo.mp4 ../configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py ../checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth --show
+
+# 操作视频加速 显卡加速
+python video_gpuaccel_demo.py demo.mp4 ../configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py ../checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth --show --nvdecode
+

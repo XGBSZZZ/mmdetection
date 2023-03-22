@@ -39,8 +39,11 @@ def main():
         if ch == 27 or ch == ord('q') or ch == ord('Q'):
             break
 
-        model.show_result(
-            img, result, score_thr=args.score_thr, wait_time=1, show=True)
+        imgsss = model.show_result(
+            img, result, score_thr=args.score_thr, wait_time=0.01, show=False)
+
+        cv2.namedWindow("zzz", cv2.WINDOW_KEEPRATIO)
+        cv2.imshow("zzz", imgsss)
 
 
 if __name__ == '__main__':
