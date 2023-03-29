@@ -10,7 +10,7 @@ from multiprocessing.dummy import Pool
 from sahi.utils.file import save_json
 import shutil
 from tools.labelme2coco.labelme2coco import get_coco_from_labelme_folder
-
+from sahi.utils.file import list_files_recursively, load_json
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -43,16 +43,35 @@ def convert(
         export_dir: path for coco jsons to be exported
         train_split_rate: ration fo train split
     """
-    # 提取数据
-    coco = get_coco_from_labelme_folder(
-        labelme_folder, skip_labels=skip_labels)
-
-    # 保存数据 分割 保存图片
+    # 删除垃圾数据
     all_images = {
         Path(i).name: i
         for i in glob(labelme_folder + "/**/*") if Path(i).suffix in
         {'.bmp', '.gif', '.jpeg', '.jpg', '.pbm', '.png', '.tif', '.tiff'}
     }
+
+    bad_dir = str(Path(labelme_folder).parent) + "/bad"
+    fuck_numb = 0
+    if not os.path.exists(bad_dir):
+        os.makedirs(bad_dir)
+    _, abs_json_path_list = list_files_recursively(labelme_folder, contains=[".json"])
+    try:
+        for json_path in abs_json_path_list:
+            if load_json(json_path)["imagePath"] not in all_images.keys():
+                shutil.move(json_path, bad_dir)
+                fuck_numb += 1
+    except:
+        shutil.move(json_path, bad_dir)
+        fuck_numb += 1
+    logger.critical(f"垃圾图片: {fuck_numb}")
+
+    # 提取数据
+    coco = get_coco_from_labelme_folder(
+        labelme_folder, skip_labels=skip_labels)
+
+    logger.info([i["name"] for i in coco.json["categories"]])
+
+    # 保存数据 分割 保存图片
 
     def save_images(images_path, name):
         name = '/' + name
@@ -92,3 +111,7 @@ def convert(
 
         images = [all_images[i["file_name"]] for i in coco.json.json["images"]]
         save_images(images, "img")
+
+    logging.info("都结束啦")
+    logging.info("都结束啦")
+    logging.info("都结束啦")
