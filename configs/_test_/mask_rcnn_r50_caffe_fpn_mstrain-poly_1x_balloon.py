@@ -26,13 +26,7 @@ data_root = 'data/tfw/KUNKUN2/z/'
 model = dict(
     roi_head=dict(
         bbox_head=dict(num_classes=len(classes)),
-        mask_head=dict(num_classes=len(classes))),
-    backbone=dict(
-        norm_cfg=dict(requires_grad=False),
-        style='caffe',
-        init_cfg=dict(
-            type='Pretrained',
-            checkpoint='open-mmlab://detectron2/resnet50_caffe')))
+        mask_head=dict(num_classes=len(classes))))
 
 data = dict(
     persistent_workers=False if debug else True,
