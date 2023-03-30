@@ -58,12 +58,8 @@ def convert(
     try:
         for json_path in abs_json_path_list:
             if load_json(json_path)["imagePath"] not in all_images.keys():
-                print("错误的JSON: ", load_json(json_path))
-                shutil.move(json_path, bad_dir)
-                try:
-                    os.remove(json_path)
-                except:
-                    pass
+                print("错误的JSON: ", load_json(json_path)["imagePath"])
+                os.remove(json_path)
                 fuck_numb += 1
     except:
         # shutil.move(json_path, bad_dir)
@@ -78,6 +74,10 @@ def convert(
     logger.info([i["name"] for i in coco.json["categories"]])
 
     # 保存数据 分割 保存图片
+
+    if os.path.exists(export_dir):
+        shutil.rmtree(export_dir)
+    os.makedirs(export_dir)
 
     def save_images(images_path, name):
         name = '/' + name
