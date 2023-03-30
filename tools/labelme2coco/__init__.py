@@ -46,7 +46,7 @@ def convert(
     # 删除垃圾数据
     all_images = {
         Path(i).name: i
-        for i in glob(labelme_folder + "/**/*") if Path(i).suffix in
+        for i in glob(labelme_folder + "/**/*", recursive=True) if Path(i).suffix in
         {'.bmp', '.gif', '.jpeg', '.jpg', '.pbm', '.png', '.tif', '.tiff'}
     }
 
@@ -58,12 +58,18 @@ def convert(
     try:
         for json_path in abs_json_path_list:
             if load_json(json_path)["imagePath"] not in all_images.keys():
+                print("错误的JSON: ", load_json(json_path))
                 shutil.move(json_path, bad_dir)
+                try:
+                    os.remove(json_path)
+                except:
+                    pass
                 fuck_numb += 1
     except:
-        shutil.move(json_path, bad_dir)
+        # shutil.move(json_path, bad_dir)
+        os.remove(json_path)
         fuck_numb += 1
-    logger.critical(f"垃圾图片: {fuck_numb}")
+    logger.critical(f"垃圾JSON: {fuck_numb}")
 
     # 提取数据
     coco = get_coco_from_labelme_folder(
